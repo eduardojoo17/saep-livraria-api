@@ -11,13 +11,13 @@ export class Editora {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column("varchar")
   nome!: string;
 
-  @Column()
+  @Column("varchar")
   cidade!: string;
 
-  @Column()
+  @Column("varchar")
   email!: string;
 
   @CreateDateColumn()

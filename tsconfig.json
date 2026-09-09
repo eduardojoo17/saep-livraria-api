@@ -11,7 +11,14 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "outDir": "dist",
-    "types": ["node", "jest"]
+    "types": [
+      "node",
+      "jest"
+    ]
   },
-  "include": ["src", "tests", "scripts"]
+  "include": [
+    "src",
+    "tests",
+    "scripts"
+  ]
 }
