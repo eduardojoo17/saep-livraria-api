@@ -1,12 +1,53 @@
-describe('Testando o modelo Editora', () => {
-    const objetoEditora = {
-        nome: 'CDC', cidade: 'Sao Paulo', email: 'c@c.com',
-    };
+import {Editora} from '../../src/models/editora';
+import { AppDataSource } from '../../src/db/dataSource';
 
-    it('Deve instanciar uma nova editora', () => {
+beforeAll(async () => {
+    await AppDataSource.initialize();
+});
+afterAll(async () => {
+    await AppDataSource.destroy();
+});
+
+// Testa o modelo editora
+describe('Testando model editora', () => {
+    const objetoEditora = {
+        nome: 'Vozes', 
+        cidade: 'Petrópolis',
+        email: 'contato@vozes.com.br',
+    };
+    test('Deve instanciar uma nova editora', () => {
+
         const editora = new Editora(objetoEditora);
         expect(editora).toEqual(
             expect.objectContaining(objetoEditora),
         );
     });
-});
+
+    let objId: number;
+    test.skip('Deve salvar editora no db usando o then', () => {
+        const editora = new Editora(objetoEditora);
+        
+        return editora.save().then((obj) => {
+            objId = obj.id;
+            expect(obj.nome).toBe('Vozes')  
+        });
+    });
+    
+
+    
+
+
+test.skip('Deve deletar registro a partir do id', async () => {
+        const editora = await Editora.delete(objId);
+        expect(editora.affected).toBe(1);
+    });
+    
+    test('Deve salvar editora no db usando async e await',async()=>{
+                const editora = new Editora(objetoEditora);
+
+        const dados = await editora.save()
+        expect(dados.nome).toBe("Vozes")
+        expect(dados.id).toBeDefined()
+    }); 
+    test.todo('Deve fazer uma chamada simulada ao db');
+})
