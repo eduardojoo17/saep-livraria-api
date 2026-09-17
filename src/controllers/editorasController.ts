@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { AppDataSource } from '../db/dataSource';
 import { Editora } from '../models/editora';
 import { Livro } from '../models/livro';
+import { error } from 'node:console';
 
 const editoras = () => AppDataSource.getRepository(Editora);
 
@@ -20,6 +21,9 @@ export async function mostrarEditora(req: Request, res: Response): Promise<void>
 
 export async function criarEditora(req: Request, res: Response): Promise<void> {
   const dados = req.body as Partial<Editora>;
+  if (!dados.nome || !dados.cidade || !dados.email) {
+  res.status(400).json({error:"Campos obrigatorios ausentes"});
+  }
   const editora = editoras().create(dados);
   await editoras().save(editora);
   res.status(201).json(editora);
@@ -29,7 +33,7 @@ export async function atualizarEditora(req: Request, res: Response): Promise<voi
   const repo = editoras();
   const editora = await repo.findOneBy({ id: Number(req.params.id) });
   if (!editora) {
-    res.status(404).json({ erro: 'Editora não encontrada' });
+    res.status(400).json({ erro: 'Editora não encontrada' });
     return;
   }
   repo.merge(editora, req.body as Partial<Editora>);

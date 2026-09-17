@@ -20,6 +20,9 @@ export async function mostrarAutor(req: Request, res: Response): Promise<void> {
 
 export async function criarAutor(req: Request, res: Response): Promise<void> {
   const dados = req.body as Partial<Autor>;
+ if (!dados.nome || !dados.nacionalidade) {
+  res.status(400).json({error:"Campos obrigatorios ausentes"});
+  }
   const autor = autores().create(dados);
   await autores().save(autor);
   res.status(201).json(autor);
